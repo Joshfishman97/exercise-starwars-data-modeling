@@ -8,10 +8,6 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
 class Planet(Base):
     __tablename__ = 'planet'
     id = Column(Integer, primary_key=True) 
@@ -26,6 +22,11 @@ class Planet(Base):
     surface_water = Column(String(250))
     created = Column(String(250))
     edited = Column(String(250))
+    people_id = Column(Integer, ForeignKey('people.id'))
+    people = relationship(People)
+    film_id = Column(Integer, ForeignKey('film.id'))
+    film=relationship(Film)
+    url = Column(String(250))
 
 class People(Base):
     __tablename__ = 'people'
@@ -34,45 +35,34 @@ class People(Base):
     birth_year = Column(String(250))
     eye_color = Column(String(250))
     homeworld_id = Column(Integer, ForeignKey('planet.id'))
-    homeworld = relationship(Planet)
+    planet = relationship(Planet)
     gender = Column(String(250))
     hair_color = Column(String(250))
     height = Column(String(250))
     mass = Column(String(250))
     skin_color = Column(String(250))
     created = Column(String(250)) 
-    edited = Column(String(250))
+    url = Column(String(250))
+    species_id = Column(Integer, ForeignKey('species.id'))
+    species = relationship(Species)
+    starships_id = Column(Integer, ForeignKey('starships.id'))
+    starships=relationship(Starships)
+    vehicles_id = Column(Integer, ForeignKey('vehicles.id'))
+    vehicles=relationship(Vehicles)
 
-class Vehicle(Base):
-    __tablename__ = 'vehicle'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-    name = Column(String(250))
-    model = Column(String(250))
-    vehicle_class = Column(String(250))
-    manufacturer = Column(String(250))
-    length = Column(String(250))
-    cost_in_credits = Column(String(250))
-    crew = Column(String(250))
-    passengers = Column(String(250))
-    max_atmosphering_speed = Column(String(250))
-    cargo_capacity = Column(String(250))
-    consumables = Column(String(250))
-    created = Column(String(250))
-    edited = Column(String(250))
-
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
 class Film(Base):
     __tablename__ = 'film'
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    people_id = Column(Integer, ForeignKey('people.id'))
+    people = relationship(People)
+    planet_id = Column(Integer, ForeignKey('planet.id'))
+    planet = relationship(Planet)
+    species_id = Column(Integer, ForeignKey('species.id'))
+    species = relationship(Species)
+    starships_id = Column(Integer, ForeignKey('starships.id'))
+    starships=relationship(Starships)
+    vehicles_id = Column(Integer, ForeignKey('vehicles.id'))
+    vehicles=relationship(Vehicles)
     title = Column(String(250))
     episode_id = Column(String(250))
     opening_crawl = Column(String(250))
@@ -81,39 +71,94 @@ class Film(Base):
     release_date = Column(String(250))
     created = Column(String(250))
     edited = Column(String(250))
+    passengers = Column(String(250))
+    max_atmosphering_speed = Column(String(250))
+    cargo_capacity = Column(String(250))
+    consumables = Column(String(250))
+    created = Column(String(250))
+    edited = Column(String(250))
+    url = Column(String(250))
 
-    def to_dict(self):
-        return {}
+
+class Starships(Base):
+    __tablename__ = 'starships'
+    mglt = Column(String(250))
+    cargo_capacity = Column(String(250))
+    consumables = Column(String(250))
+    created = Column(String(250))
+    edited = Column(String(250))
+    url = Column(String(250))
+    cost_in_credits = Column(String(250))
+    crew = Column(String(250))
+    hyperdrive_rating = Column(String(250))
+    length = Column(String(250))
+    manufacturer = Column(String(250))
+    max_atmosphering_speed = Column(String(250))
+    model = Column(String(250))
+    name = Column(String(250))
+    passengers = Column(String(250))
+    film_id = Column(Integer, ForeignKey('film.id'))
+    film=relationship(Film)
+    starship_class = Column(String(250))
+
+
+
+
+
+class Vehicle(Base):
+    __tablename__ = 'vehicle'
+    cargo_capacity = Column(String(250))
+    consumables = Column(String(250))
+    created = Column(String(250))
+    edited = Column(String(250))
+    url = Column(String(250))
+    cost_in_credits = Column(String(250))
+    crew = Column(String(250))
+    length = Column(String(250))
+    manufacturer = Column(String(250))
+    max_atmosphering_speed = Column(String(250))
+    model = Column(String(250))
+    name = Column(String(250))
+    passengers = Column(String(250))
+    film_id = Column(Integer, ForeignKey('film.id'))
+    film=relationship(Film)
+    people_id = Column(Integer, ForeignKey('people.id'))
+    people = relationship(People)
+    vehicle_class = Column(String(250))
+
+
+class Species(Base):
+    __tablename__ = 'species'
+     average_height = Column(String(250))
+    average_lifespan = Column(String(250))
+    created = Column(String(250))
+    edited = Column(String(250))
+    url = Column(String(250))
+    classification = Column(String(250))
+    designation = Column(String(250))
+    eye_colors = Column(String(250))
+    hair_colors = Column(String(250))
+    language = Column(String(250))
+    skin_colors = Column(String(250))
+    people_id = Column(Integer, ForeignKey('people.id'))
+    people = relationship(People)
+    planet_id = Column(Integer, ForeignKey('planet.id'))
+    planet = relationship(Planet)
+    film_id = Column(Integer, ForeignKey('film.id'))
+    film=relationship(Film)
+
 class PeopleFilm(Base):
-    __tablename__ = 'peoplefilm'
+    __tablename__ = 'people_film'
     people_id = Column(Integer, ForeignKey('people.id'), primary_key=True)
     people = relationship(People)
     film_id = Column(Integer, ForeignKey('film.id'), primary_key=True)
     film = relationship(Film)
 
-## Draw from SQLAlchemy base
-render_er(Base, 'diagram.png') 
-
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
-
     def to_dict(self):
         return {}
 
 ## Draw from SQLAlchemy base
-render_er(Base, 'diagram.png')
+render_er(Base, 'diagram.png') 
+
+
+
