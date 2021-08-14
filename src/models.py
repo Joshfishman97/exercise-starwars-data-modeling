@@ -7,6 +7,12 @@ from sqlalchemy import create_engine
 from eralchemy import render_er
 
 Base = declarative_base()
+class Residents(Base):
+    __tablename__ = 'residents'
+    id = Column(Integer, primary_key=True)
+    planet_id = Column(Integer, ForeignKey('planet.id'))
+    planet = relationship(Planet)
+
 
 class Planet(Base):
     __tablename__ = 'planet'
@@ -22,11 +28,13 @@ class Planet(Base):
     surface_water = Column(String(250))
     created = Column(String(250))
     edited = Column(String(250))
-    people_id = Column(Integer, ForeignKey('people.id'))
-    people = relationship(People)
+    residents.id = Column(Integer, ForeignKey('residents.id'))
+    residents = relationship(Residents)
     film_id = Column(Integer, ForeignKey('film.id'))
     film=relationship(Film)
     url = Column(String(250))
+
+    
 
 class People(Base):
     __tablename__ = 'people'
@@ -34,8 +42,8 @@ class People(Base):
     name = Column(String(250))
     birth_year = Column(String(250))
     eye_color = Column(String(250))
-    homeworld_id = Column(Integer, ForeignKey('planet.id'))
-    planet = relationship(Planet)
+    homeworld_id = Column(Integer, ForeignKey('homeworld.id'))
+    homeworld = relationship(Homeworld)
     gender = Column(String(250))
     hair_color = Column(String(250))
     height = Column(String(250))
@@ -129,7 +137,7 @@ class Vehicle(Base):
 
 class Species(Base):
     __tablename__ = 'species'
-     average_height = Column(String(250))
+    average_height = Column(String(250))
     average_lifespan = Column(String(250))
     created = Column(String(250))
     edited = Column(String(250))
@@ -142,8 +150,8 @@ class Species(Base):
     skin_colors = Column(String(250))
     people_id = Column(Integer, ForeignKey('people.id'))
     people = relationship(People)
-    planet_id = Column(Integer, ForeignKey('planet.id'))
-    planet = relationship(Planet)
+    homeworld = Column(Integer, ForeignKey('homeworld.id'))
+    homeworld = relationship(Homeworld)
     film_id = Column(Integer, ForeignKey('film.id'))
     film=relationship(Film)
 
